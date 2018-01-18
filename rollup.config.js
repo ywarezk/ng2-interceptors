@@ -54,10 +54,10 @@ export default {
     onwarn: () => { return },
     output: {
         format: 'umd',
-        name: 'ng.angularLibraryStarter',
+        name: 'nz.ng2Interceptors',
         globals: globals,
         sourcemap: true,
         exports: 'named',
-        amd: { id: 'angular-library-starter' }
+        amd: { id: 'ng2-interceptors' }
     }
 }
