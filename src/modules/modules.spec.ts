@@ -10,18 +10,18 @@
  * @licence: MIT
  */
 
-import {TestBed, inject} from "@angular/core/testing";
-import {CsrfModule} from "./csrf.module";
-import {TokenAuthenticationModule} from "./token-authentication.module";
-import {DecorateRequestModule} from "./decorate-request.module";
+import {TestBed, inject} from '@angular/core/testing';
+import {CsrfModule} from './csrf.module';
+import {TokenAuthenticationModule} from './token-authentication.module';
+import {DecorateRequestModule} from './decorate-request.module';
 import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpClient} from "@angular/common/http";
-import {AddHeadersInterceptor} from "./services/interceptors/add-headers.interceptor";
+import {HttpClient} from '@angular/common/http';
+import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
 import * as Cookies from 'js-cookie';
 
 describe('Modules', () => {
     let httpClient: HttpClient;
-    let addHeaderInterceptor: AddHeadersInterceptor;
+    let addHeaderInterceptor: DecorateRequestInterceptor;
 
     localStorage.setItem('token', 'hello world');
     Cookies.set('XSRF-TOKEN', 'wat');
@@ -39,7 +39,7 @@ describe('Modules', () => {
         });
     });
 
-    beforeEach(inject([HttpClient, AddHeadersInterceptor], (client: HttpClient, interceptor: AddHeadersInterceptor) => {
+    beforeEach(inject([HttpClient, DecorateRequestInterceptor], (client: HttpClient, interceptor: DecorateRequestInterceptor) => {
         httpClient = client;
         addHeaderInterceptor = interceptor;
     }));

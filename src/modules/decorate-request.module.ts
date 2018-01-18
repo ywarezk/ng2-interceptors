@@ -9,12 +9,12 @@
  * @licence: MIT
  */
 
-import {AddHeadersInterceptor} from "./services/interceptors/add-headers.interceptor";
-import {HEADERS, PARAMS} from "./services/tokens.service";
-import {HTTP_INTERCEPTORS, HttpHeaders, HttpParams} from "@angular/common/http";
-import {ModuleWithProviders, NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {IOptionsInterceptorModule} from "./interfaces/ioptions";
+import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
+import {HEADERS, PARAMS} from '../services/tokens.service';
+import {HTTP_INTERCEPTORS, HttpHeaders, HttpParams} from '@angular/common/http';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {IOptionsInterceptorModule} from '../interfaces/ioptions';
 
 @NgModule({
   imports: [
@@ -39,14 +39,14 @@ export class DecorateRequestModule {
         tempParams = options.params;
       }
       const tempParamsArray = tempParams.split('&');
-      for (let keyValue of tempParamsArray) {
+      for (const keyValue of tempParamsArray) {
         const key = keyValue.split('=')[0];
         const val = keyValue.split('=')[1];
         params.set(key, val);
       }
     } else if (options && options.params) {
-      for (let key of Object.keys(options.params)) {
-        params.set(key, options.params[key]);
+      for (const key of Object.keys(options.params)) {
+        params.set(key, (<{[key: string]: string}>options.params)[key]);
       }
     }
 
@@ -57,7 +57,7 @@ export class DecorateRequestModule {
           {provide: PARAMS, useValue: params},
           {
             provide: HTTP_INTERCEPTORS,
-            useClass: AddHeadersInterceptor,
+            useClass: DecorateRequestInterceptor,
             multi: true
           }
       ]

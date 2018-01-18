@@ -55,6 +55,7 @@
     "@angular/platform-server": "5.0.0",
     "@compodoc/compodoc": "1.0.3",
     "@types/jasmine": "2.6.2",
+    "@types/js-cookie": "^2.1.0",
     "@types/node": "8.0.47",
     "chalk": "2.3.0",
     "codelyzer": "4.0.2",

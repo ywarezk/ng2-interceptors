@@ -8,13 +8,13 @@
  * @licence: MIT
  */
 
-import {Inject, Injectable} from "@angular/core";
+import {Inject, Injectable} from '@angular/core';
 import {HEADERS, PARAMS} from '../tokens.service';
-import {HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs/Observable";
+import {HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpHeaders, HttpParams} from '@angular/common/http';
+import {Observable} from 'rxjs/Observable';
 
 @Injectable()
-export class AddHeadersInterceptor implements HttpInterceptor{
+export class DecorateRequestInterceptor implements HttpInterceptor {
     constructor(@Inject(HEADERS) private _headers: HttpHeaders, @Inject(PARAMS) private _params: HttpParams) {}
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
