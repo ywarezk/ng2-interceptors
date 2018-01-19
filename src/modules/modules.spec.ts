@@ -52,4 +52,4 @@ describe('Modules', () => {
             req.flush({});
             httpMock.verify();
         }));
-})
+});

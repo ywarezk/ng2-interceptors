@@ -9,8 +9,9 @@
  */
 
 export {IOptionsInterceptorModule, IOptionsTokenAuthenticationModule, TokenStorages} from './interfaces/ioptions';
-export {AddHeadersInterceptor} from './services/interceptors/add-headers.interceptor';
+export {DecorateRequestInterceptor} from './services/interceptors/decorate-request.interceptor';
 export {TokenAuthenticationModule} from './modules/token-authentication.module';
+export {CsrfModule} from './modules/csrf.module';
 export {DecorateRequestModule} from './modules/decorate-request.module';
 
 

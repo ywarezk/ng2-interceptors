@@ -1,5 +1,5 @@
 {
-  "name": "ng2-interceptors",
+  "name": "nz-ng2-interceptors",
   "version": "0.0.1",
   "description": "Angular Cache interceptor, Token authentication interceptor, CSRF XSRF interceptor",
   "main": "./bundles/ng2-interceptors.umd.js",
@@ -24,6 +24,7 @@
     "url": "git@github.com:ywarezk/ng2-interceptors.git/issues"
   },
   "keywords": [
+    "nerdeez",
     "angular",
     "angular2",
     "angular 2",
