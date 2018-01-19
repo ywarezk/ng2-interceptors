@@ -41,7 +41,8 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "tslib": "^1.7.1"
+    "tslib": "^1.7.1",
+    "url-join": "^3.0.0"
   },
   "peerDependencies": {
     "rxjs": "^5.5.2",
@@ -59,6 +60,7 @@
     "@types/jasmine": "2.6.2",
     "@types/js-cookie": "^2.1.0",
     "@types/node": "8.0.47",
+    "@types/url-join": "^0.8.2",
     "chalk": "2.3.0",
     "codelyzer": "4.0.2",
     "core-js": "2.5.1",

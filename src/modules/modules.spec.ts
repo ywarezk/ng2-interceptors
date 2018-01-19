@@ -31,7 +31,8 @@ describe('Modules', () => {
                 TokenAuthenticationModule.withOptions(),
                 DecorateRequestModule.withOptions({
                     headers: {'foo': 'bar'},
-                    params: {format: 'json'}
+                    params: {format: 'json'},
+                    url: 'https://www.google.com'
                 })
             ]
         });
@@ -47,7 +48,8 @@ describe('Modules', () => {
                 return request.headers.get('Authorization') === 'Token hello world' &&
                     request.headers.get('X-XSRF-TOKEN') === 'wat' &&
                     request.headers.get('foo') === 'bar' &&
-                    request.params.get('format') === 'json';
+                    request.params.get('format') === 'json' &&
+                    request.url === 'https://www.google.com/data';
             });
             req.flush({});
             httpMock.verify();
