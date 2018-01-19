@@ -28,7 +28,7 @@ export class CsrfModule {
     }): ModuleWithProviders {
         const headers: {[key: string]: any} = {};
         if (typeof window !== 'undefined') {
-            headers[options.headerName as string] = Cookies.get(options.cookieName as string);
+            headers[options.headerName ?  options.headerName : 'X-XSRF-TOKEN'] = Cookies.get(options.cookieName ?  options.cookieName : 'XSRF-TOKEN');
         }
         return {
             ngModule: CsrfModule,

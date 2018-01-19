@@ -101,4 +101,66 @@ describe('Modules', () => {
         );
     });
 
+    describe('no headers', () => {
+        Cookies.set('XSRF-TOKEN', 'wat');
+        Cookies.set('betaToken', 'hello token');
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [
+                    HttpClientTestingModule,
+                    DecorateRequestModule.withOptions({
+                      params: {format: 'json'},
+                      url: 'https://www.nerdeez.com'
+                    })
+                ]
+            });
+        });
+
+        it(
+            'expects a GET request',
+            inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+                http
+                    .get('data')
+                    .subscribe();
+                const req = httpMock.expectOne((request: HttpRequest<any>) => {
+                    return request.params.get('format') === 'json' &&
+                        request.url === 'https://www.nerdeez.com/data';
+                });
+                req.flush({});
+                httpMock.verify();
+            })
+        );
+    });
+
+    describe('no headers', () => {
+        Cookies.set('csrftoken', 'wat');
+        Cookies.set('betaToken', 'hello token');
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [
+                    HttpClientTestingModule,
+                    CsrfModule.withOptions({
+                        cookieName: 'csrftoken'
+                    })
+                ]
+            });
+        });
+
+        it(
+            'expects a GET request',
+            inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+                http
+                    .get('data')
+                    .subscribe();
+                const req = httpMock.expectOne((request: HttpRequest<any>) => {
+                    return request.headers.get('X-XSRF-TOKEN') === 'wat';
+                });
+                req.flush({});
+                httpMock.verify();
+            })
+        );
+    });
+
 });
