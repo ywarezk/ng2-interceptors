@@ -10,7 +10,7 @@
 
 import {HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import * as urljoin from 'url-join';
+import 'url-join';
 
 interface ParamsOrHeaders<T> {
     get: (key: string) => string | null;
