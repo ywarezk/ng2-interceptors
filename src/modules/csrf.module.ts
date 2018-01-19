@@ -13,7 +13,7 @@ import {NgModule, ModuleWithProviders} from '@angular/core';
 import {IOptionsCsrfModule} from '../interfaces/ioptions';
 import {CommonModule} from '@angular/common';
 import {HttpHeaders, HttpParams, HTTP_INTERCEPTORS} from '@angular/common/http';
-import * as Cookies from 'js-cookie';
+import * as Cookies from '../utils/cookies';
 import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
 
 @NgModule({
@@ -27,7 +27,9 @@ export class CsrfModule {
         headerName: 'X-XSRF-TOKEN'
     }): ModuleWithProviders {
         const headers: {[key: string]: any} = {};
-        headers[options.headerName as string] = Cookies.get(options.cookieName as string);
+        if (typeof window !== 'undefined') {
+            headers[options.headerName as string] = Cookies.get(options.cookieName as string);
+        }
         return {
             ngModule: CsrfModule,
             providers: [

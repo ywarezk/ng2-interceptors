@@ -8,7 +8,7 @@
  * @licence: MIT
  */
 
-import * as Cookies from 'js-cookie';
+import * as Cookies from '../utils/cookies';
 import {IOptionsTokenAuthenticationModule, TokenStorages} from '../interfaces/ioptions';
 import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
@@ -26,18 +26,20 @@ export class TokenAuthenticationModule {
     tokenHeaderPrefix: 'Token '
   }): ModuleWithProviders {
     let token: string | null | undefined = '';
-    switch (options.tokenStoredIn) {
-        case TokenStorages.localStorage:
-            token = localStorage ? localStorage.getItem(options.tokenKeyName as string) : '';
-            break;
-        case TokenStorages.sessionStorage:
-            token = sessionStorage ? sessionStorage.getItem(options.tokenKeyName as string) : '';
-            break;
-        case TokenStorages.cookies:
-            token = Cookies ? Cookies.get(options.tokenKeyName as string) : '';
-            break;
-        default:
-            token = '';
+    if (typeof window !== 'undefined') {
+        switch (options.tokenStoredIn) {
+            case TokenStorages.localStorage:
+                token = localStorage ? localStorage.getItem(options.tokenKeyName as string) : '';
+                break;
+            case TokenStorages.sessionStorage:
+                token = sessionStorage ? sessionStorage.getItem(options.tokenKeyName as string) : '';
+                break;
+            case TokenStorages.cookies:
+                token = Cookies ? Cookies.get(options.tokenKeyName as string) : '';
+                break;
+            default:
+                token = '';
+        }
     }
     if (!token) {
         token = '';

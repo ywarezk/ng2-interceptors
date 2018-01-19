@@ -37,7 +37,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "js-cookie": "^2.2.0",
     "tslib": "^1.7.1"
   },
   "peerDependencies": {

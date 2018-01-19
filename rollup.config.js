@@ -45,7 +45,11 @@ const globals = {
     '@angular/core': 'ng.core',
     '@angular/common': 'ng.common',
     'rxjs/Observable': 'Rx',
-    'rxjs/Observer': 'Rx'
+    'rxjs/Observer': 'Rx',
+    'rxjs/operator/filter': 'Rx',
+    'rxjs/operator/map': 'Rx',
+    'rxjs/observable/of': 'Rx',
+    'rxjs/operator/concatMap': 'Rx'
 };
 
 export default {

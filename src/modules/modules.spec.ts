@@ -16,7 +16,7 @@ import {TokenAuthenticationModule} from './token-authentication.module';
 import {DecorateRequestModule} from './decorate-request.module';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
 import {HttpClient, HttpRequest} from '@angular/common/http';
-import * as Cookies from 'js-cookie';
+import * as Cookies from '../utils/cookies';
 
 describe('Modules', () => {
 
