@@ -10,7 +10,10 @@
 
 import {HttpInterceptor, HttpEvent, HttpHandler, HttpRequest, HttpHeaders, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs/Observable';
-import 'url-join';
+
+declare var require: any;
+
+const urljoin = require('url-join');
 
 interface ParamsOrHeaders<T> {
     get: (key: string) => string | null;
@@ -37,7 +40,7 @@ export class DecorateRequestInterceptor implements HttpInterceptor {
             params: this._merge(req.params, this._params)
         };
         if (this._url) {
-            newReqOptions['url'] = urljoin(this._url, req.url);
+            newReqOptions['url'] = (<any>urljoin)(this._url, req.url);
         }
         const newReq = req.clone(newReqOptions);
         return next.handle(newReq);
