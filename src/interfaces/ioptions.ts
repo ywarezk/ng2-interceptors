@@ -22,6 +22,7 @@ export enum TokenStorages {
 export interface IOptionsInterceptorModule {
     headers?: HttpHeaders | {[key: string]: string | string[]} | string;
     params?: HttpParams | {[key: string]: string} | string;
+    url?: string;
 }
 
 /**

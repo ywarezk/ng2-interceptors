@@ -18,7 +18,7 @@ interface ParamsOrHeaders<T> {
 }
 
 export class DecorateRequestInterceptor implements HttpInterceptor {
-    constructor(private _headers: HttpHeaders, private _params: HttpParams) {
+    constructor(private _headers: HttpHeaders, private _params: HttpParams, private _url?: string) {
     }
 
     private _merge<T extends ParamsOrHeaders<T>>(headersA: T, headersB: T): T {
@@ -31,10 +31,14 @@ export class DecorateRequestInterceptor implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        const newReq = req.clone({
+        const newReqOptions: {[key: string]: any} = {
             headers: this._merge(req.headers, this._headers),
             params: this._merge(req.params, this._params)
-        });
+        };
+        if (this._url) {
+            newReqOptions['url'] = this._url;
+        }
+        const newReq = req.clone(newReqOptions);
         return next.handle(newReq);
     }
 }

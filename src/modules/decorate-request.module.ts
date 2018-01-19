@@ -55,7 +55,7 @@ export class DecorateRequestModule {
       providers: [
           {
             provide: HTTP_INTERCEPTORS,
-            useValue: new DecorateRequestInterceptor(headers, params),
+            useValue: new DecorateRequestInterceptor(headers, params, options.url),
             multi: true
           }
       ]

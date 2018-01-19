@@ -1,6 +1,6 @@
 {
   "name": "nz-ng2-interceptors",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Angular Cache interceptor, Token authentication interceptor, CSRF XSRF interceptor",
   "main": "./bundles/ng2-interceptors.umd.js",
   "module": "./esm5/ng2-interceptors.js",
@@ -29,6 +29,10 @@
     "angular2",
     "angular 2",
     "ng2",
+    "angular5",
+    "ng5",
+    "angular4",
+    "ng4",
     "HttpClientModule",
     "HttpClient",
     "Interceptors",
