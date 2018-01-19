@@ -45,7 +45,8 @@ export class TokenAuthenticationModule {
         token = '';
     }
     const moduleOptions: {[key: string]: string} = {};
-    moduleOptions[options.tokenHeader as string] = options.tokenHeaderPrefix + token;
+    moduleOptions[options.tokenHeader ? options.tokenHeader : 'Authorization']
+        = options.tokenHeaderPrefix ?  options.tokenHeaderPrefix + token : 'Token ' + token;
     return {
         ngModule: TokenAuthenticationModule,
         providers: [
