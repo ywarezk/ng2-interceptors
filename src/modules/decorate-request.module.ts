@@ -10,15 +10,15 @@
  */
 
 import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
-import {HEADERS, PARAMS} from '../services/tokens.service';
-import {HTTP_INTERCEPTORS, HttpHeaders, HttpParams} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule, HttpHeaders, HttpParams} from '@angular/common/http';
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {IOptionsInterceptorModule} from '../interfaces/ioptions';
 
 @NgModule({
   imports: [
-    CommonModule
+    CommonModule,
+    HttpClientModule
   ]
 })
 export class DecorateRequestModule {
@@ -31,7 +31,7 @@ export class DecorateRequestModule {
     let params: HttpParams = new HttpParams();
     if (options && options.params instanceof HttpParams) {
       params = options.params;
-    } else if(options && typeof options.params === 'string') {
+    } else if (options && typeof options.params === 'string') {
       let tempParams: string;
       if (options.params[0] === '?') {
         tempParams = options.params.substr(1);
@@ -46,18 +46,16 @@ export class DecorateRequestModule {
       }
     } else if (options && options.params) {
       for (const key of Object.keys(options.params)) {
-        params.set(key, (<{[key: string]: string}>options.params)[key]);
+        params = params.set(key, (<{[key: string]: string}>options.params)[key]);
       }
     }
 
     return {
       ngModule: DecorateRequestModule,
       providers: [
-          {provide: HEADERS, useValue: headers},
-          {provide: PARAMS, useValue: params},
           {
             provide: HTTP_INTERCEPTORS,
-            useClass: DecorateRequestInterceptor,
+            useValue: new DecorateRequestInterceptor(headers, params),
             multi: true
           }
       ]

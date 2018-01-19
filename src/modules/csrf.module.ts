@@ -9,33 +9,34 @@
  * @copyright: Nerdeez Ltd
  */
 
-import {NgModule} from '@angular/core';
-import {IOptionsCsrfModule} from "./interfaces/ioptions";
-import {CommonModule} from "@angular/common";
-import {DecorateRequestModule} from "./decorate-request.module";
-import {HttpHeaders} from "@angular/common/http";
+import {NgModule, ModuleWithProviders} from '@angular/core';
+import {IOptionsCsrfModule} from '../interfaces/ioptions';
+import {CommonModule} from '@angular/common';
+import {HttpHeaders, HttpParams, HTTP_INTERCEPTORS} from '@angular/common/http';
 import * as Cookies from 'js-cookie';
+import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
 
 @NgModule({
+    imports: [
+        CommonModule
+    ]
 })
 export class CsrfModule {
     static withOptions(options: IOptionsCsrfModule = {
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN'
-    }) {
-        const headers = {};
-        headers[options.headerName] = Cookies.get(options.cookieName);
-
-        @NgModule({
-            imports: [
-                CommonModule,
-                DecorateRequestModule.withOptions({
-                    headers: new HttpHeaders(headers)
-                })
+    }): ModuleWithProviders {
+        const headers: {[key: string]: any} = {};
+        headers[options.headerName as string] = Cookies.get(options.cookieName as string);
+        return {
+            ngModule: CsrfModule,
+            providers: [
+                {
+                    provide: HTTP_INTERCEPTORS,
+                    useValue: new DecorateRequestInterceptor(new HttpHeaders(headers), new HttpParams()),
+                    multi: true
+                }
             ]
-        })
-        class DynamicModule {
-        }
-        return DynamicModule;
+        };
     }
 }

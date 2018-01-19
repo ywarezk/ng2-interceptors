@@ -8,14 +8,15 @@
  * @licence: MIT
  */
 
-import * as Cookies from "js-cookie";
-import {IOptionsTokenAuthenticationModule, TokenStorages} from "./interfaces/ioptions";
-import {NgModule} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {HttpHeaders} from "@angular/common/http";
-import {DecorateRequestModule} from "./decorate-request.module";
+import * as Cookies from 'js-cookie';
+import {IOptionsTokenAuthenticationModule, TokenStorages} from '../interfaces/ioptions';
+import {NgModule, ModuleWithProviders} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HttpHeaders, HttpParams, HTTP_INTERCEPTORS} from '@angular/common/http';
+import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
 
 @NgModule({
+    imports: [CommonModule],
 })
 export class TokenAuthenticationModule {
   static withOptions(options: IOptionsTokenAuthenticationModule = {
@@ -23,31 +24,35 @@ export class TokenAuthenticationModule {
     tokenKeyName: 'token',
     tokenHeader: 'Authorization',
     tokenHeaderPrefix: 'Token '
-  }) {
-    let token: string = '';
+  }): ModuleWithProviders {
+    let token: string | null | undefined = '';
     switch (options.tokenStoredIn) {
         case TokenStorages.localStorage:
-            token = localStorage ? localStorage.getItem(options.tokenKeyName) : '';
+            token = localStorage ? localStorage.getItem(options.tokenKeyName as string) : '';
             break;
         case TokenStorages.sessionStorage:
-            token = sessionStorage ? sessionStorage.getItem(options.tokenKeyName) : '';
+            token = sessionStorage ? sessionStorage.getItem(options.tokenKeyName as string) : '';
             break;
         case TokenStorages.cookies:
-            token = Cookies ? Cookies.get(options.tokenKeyName) : '';
+            token = Cookies ? Cookies.get(options.tokenKeyName as string) : '';
+            break;
         default:
             token = '';
     }
-    const moduleOptions = {};
-    moduleOptions[options.tokenHeader] = options.tokenHeaderPrefix + token;
-    @NgModule({
-        imports: [
-            CommonModule,
-            DecorateRequestModule.withOptions({
-                headers: new HttpHeaders(moduleOptions)
-            })
+    if (!token) {
+        token = '';
+    }
+    const moduleOptions: {[key: string]: string} = {};
+    moduleOptions[options.tokenHeader as string] = options.tokenHeaderPrefix + token;
+    return {
+        ngModule: TokenAuthenticationModule,
+        providers: [
+            {
+                provide: HTTP_INTERCEPTORS,
+                useValue: new DecorateRequestInterceptor(new HttpHeaders(moduleOptions), new HttpParams()),
+                multi: true
+            }
         ]
-    })
-    class DynamicModule {}
-    return DynamicModule;
+    };
   }
 }

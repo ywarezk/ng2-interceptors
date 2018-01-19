@@ -14,14 +14,11 @@ import {TestBed, inject} from '@angular/core/testing';
 import {CsrfModule} from './csrf.module';
 import {TokenAuthenticationModule} from './token-authentication.module';
 import {DecorateRequestModule} from './decorate-request.module';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {HttpClient} from '@angular/common/http';
-import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
+import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import {HttpClient, HttpRequest} from '@angular/common/http';
 import * as Cookies from 'js-cookie';
 
 describe('Modules', () => {
-    let httpClient: HttpClient;
-    let addHeaderInterceptor: DecorateRequestInterceptor;
 
     localStorage.setItem('token', 'hello world');
     Cookies.set('XSRF-TOKEN', 'wat');
@@ -29,26 +26,30 @@ describe('Modules', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             imports: [
+                HttpClientTestingModule,
                 CsrfModule.withOptions(),
                 TokenAuthenticationModule.withOptions(),
                 DecorateRequestModule.withOptions({
-                    'headers': {'foo': 'bar'}
-                }),
-                HttpClientTestingModule
+                    headers: {'foo': 'bar'},
+                    params: {format: 'json'}
+                })
             ]
         });
     });
 
-    beforeEach(inject([HttpClient, DecorateRequestInterceptor], (client: HttpClient, interceptor: DecorateRequestInterceptor) => {
-        httpClient = client;
-        addHeaderInterceptor = interceptor;
-    }));
-
-    it('make sure the interceptor is called for each of our modules', (done) => {
-        spyOn(addHeaderInterceptor, 'intercept');
-        httpClient.get('https://www.google.com').subscribe(() => {
-            expect(addHeaderInterceptor.intercept).toHaveBeenCalledTimes(3);
-            done();
-        });
-    });
+    it(
+        'expects a GET request',
+        inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+            http
+                .get('/data')
+                .subscribe();
+            const req = httpMock.expectOne((request: HttpRequest<any>) => {
+                return request.headers.get('Authorization') === 'Token hello world' &&
+                    request.headers.get('X-XSRF-TOKEN') === 'wat' &&
+                    request.headers.get('foo') === 'bar' &&
+                    request.params.get('format') === 'json';
+            });
+            req.flush({});
+            httpMock.verify();
+        }));
 })
