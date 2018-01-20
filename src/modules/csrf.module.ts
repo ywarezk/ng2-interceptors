@@ -9,12 +9,22 @@
  * @copyright: Nerdeez Ltd
  */
 
-import {NgModule, ModuleWithProviders} from '@angular/core';
+import {NgModule, ModuleWithProviders, InjectionToken} from '@angular/core';
 import {IOptionsCsrfModule} from '../interfaces/ioptions';
 import {CommonModule} from '@angular/common';
 import {HttpHeaders, HttpParams, HTTP_INTERCEPTORS} from '@angular/common/http';
 import * as Cookies from '../utils/cookies';
 import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
+
+export const OPTIONS = new InjectionToken<IOptionsCsrfModule>('OPTIONS');
+
+export function initialize(options: IOptionsCsrfModule): DecorateRequestInterceptor {
+    const headers: {[key: string]: any} = {};
+    if (typeof window !== 'undefined') {
+        headers[options.headerName ?  options.headerName : 'X-XSRF-TOKEN'] = Cookies.get(options.cookieName ?  options.cookieName : 'XSRF-TOKEN');
+    }
+    return new DecorateRequestInterceptor(new HttpHeaders(headers), new HttpParams())
+}
 
 @NgModule({
     imports: [
@@ -26,16 +36,14 @@ export class CsrfModule {
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN'
     }): ModuleWithProviders {
-        const headers: {[key: string]: any} = {};
-        if (typeof window !== 'undefined') {
-            headers[options.headerName ?  options.headerName : 'X-XSRF-TOKEN'] = Cookies.get(options.cookieName ?  options.cookieName : 'XSRF-TOKEN');
-        }
         return {
             ngModule: CsrfModule,
             providers: [
+                {provide: OPTIONS, useValue: options},
                 {
                     provide: HTTP_INTERCEPTORS,
-                    useValue: new DecorateRequestInterceptor(new HttpHeaders(headers), new HttpParams()),
+                    deps: [OPTIONS],
+                    useFactory: initialize,
                     multi: true
                 }
             ]

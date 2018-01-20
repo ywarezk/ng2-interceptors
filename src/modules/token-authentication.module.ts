@@ -9,22 +9,15 @@
  */
 
 import * as Cookies from '../utils/cookies';
-import {IOptionsTokenAuthenticationModule, TokenStorages} from '../interfaces/ioptions';
-import {NgModule, ModuleWithProviders} from '@angular/core';
+import {IOptionsCsrfModule, IOptionsTokenAuthenticationModule, TokenStorages} from '../interfaces/ioptions';
+import {NgModule, ModuleWithProviders, InjectionToken} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {HttpHeaders, HttpParams, HTTP_INTERCEPTORS} from '@angular/common/http';
 import {DecorateRequestInterceptor} from '../services/interceptors/decorate-request.interceptor';
 
-@NgModule({
-    imports: [CommonModule],
-})
-export class TokenAuthenticationModule {
-  static withOptions(options: IOptionsTokenAuthenticationModule = {
-    tokenStoredIn: TokenStorages.localStorage,
-    tokenKeyName: 'token',
-    tokenHeader: 'Authorization',
-    tokenHeaderPrefix: 'Token '
-  }): ModuleWithProviders {
+export const OPTIONS = new InjectionToken<IOptionsTokenAuthenticationModule>('OPTIONS');
+
+export function initialize(options: IOptionsTokenAuthenticationModule): DecorateRequestInterceptor {
     let token: string | null | undefined = '';
     if (typeof window !== 'undefined') {
         switch (options.tokenStoredIn) {
@@ -47,12 +40,28 @@ export class TokenAuthenticationModule {
     const moduleOptions: {[key: string]: string} = {};
     moduleOptions[options.tokenHeader ? options.tokenHeader : 'Authorization']
         = options.tokenHeaderPrefix ?  options.tokenHeaderPrefix + token : 'Token ' + token;
+    return new DecorateRequestInterceptor(new HttpHeaders(moduleOptions), new HttpParams());
+}
+
+@NgModule({
+    imports: [CommonModule],
+})
+export class TokenAuthenticationModule {
+  static withOptions(options: IOptionsTokenAuthenticationModule = {
+    tokenStoredIn: TokenStorages.localStorage,
+    tokenKeyName: 'token',
+    tokenHeader: 'Authorization',
+    tokenHeaderPrefix: 'Token '
+  }): ModuleWithProviders {
+
     return {
         ngModule: TokenAuthenticationModule,
         providers: [
+            {provide: OPTIONS, useValue: options},
             {
                 provide: HTTP_INTERCEPTORS,
-                useValue: new DecorateRequestInterceptor(new HttpHeaders(moduleOptions), new HttpParams()),
+                deps: [OPTIONS],
+                useFactory: initialize,
                 multi: true
             }
         ]
