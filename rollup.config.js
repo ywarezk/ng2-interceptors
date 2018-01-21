@@ -62,6 +62,6 @@ export default {
         globals: globals,
         sourcemap: true,
         exports: 'named',
-        amd: { id: 'ng2-interceptors' }
+        amd: { id: 'nz-ng2-interceptors' }
     }
 }

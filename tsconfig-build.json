@@ -34,6 +34,6 @@
         "annotateForClosureCompiler": true,
         "strictMetadataEmit": true,
         "flatModuleOutFile": "ng2-interceptors.js",
-        "flatModuleId": "ng2-interceptors"
+        "flatModuleId": "nz-ng2-interceptors"
     }
 }

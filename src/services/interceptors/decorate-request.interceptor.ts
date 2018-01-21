@@ -27,9 +27,13 @@ export class DecorateRequestInterceptor implements HttpInterceptor {
 
     private _merge<T extends ParamsOrHeaders<T>>(headersA: T, headersB: T): T {
         let result: T = headersA;
-        const keys = headersB.keys();
-        for (const key of keys) {
-            result = result.set(key, headersB.get(key) as string);
+        try {
+            const keys = headersB.keys();
+            for (const key of keys) {
+                result = result.set(key, headersB.get(key) as string);
+            }
+        } catch(err) {
+            console.error('The headers or params you provided are possibly undefined in value');
         }
         return result;
     }
