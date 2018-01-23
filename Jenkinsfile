@@ -7,6 +7,10 @@
  * @copyright: Nerdeez Ltd
  */
 
+@Library('nerdeez')
+import nerdeez.Git
+import nerdeez.Email
+
 node('EC2') {
     try {
         stage 'Checkout'
