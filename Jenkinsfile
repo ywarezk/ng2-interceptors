@@ -15,7 +15,7 @@ node('EC2') {
     try {
         stage 'Checkout'
             checkout scm
-        stage 'Run tests'
+        stage 'Docker Build'
             sh "npm install"
             sh "npm test"
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: '**/coverage/', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
