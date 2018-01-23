@@ -10,6 +10,7 @@
 @Library('nerdeez')
 import nerdeez.Git
 import nerdeez.Email
+import nerdeez.Docker
 
 node('EC2') {
     try {
