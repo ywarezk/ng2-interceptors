@@ -18,6 +18,7 @@ module.exports = function (config) {
             require('karma-chrome-launcher'),
             require('karma-webpack'),
             require('karma-sourcemap-loader'),
+            require('karma-phantomjs-launcher'),
             require('karma-junit-reporter'),
             require('karma-spec-reporter'),
             require('karma-coverage-istanbul-reporter'),
@@ -26,7 +27,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            { pattern: 'spec.bundle.js', watched: false }
+            { pattern: 'spec.bundle.ts', watched: false }
         ],
 
         // list of files to exclude
@@ -36,7 +37,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.js': ['webpack', 'sourcemap']
+            'spec.bundle.ts': ['webpack', 'sourcemap']
             // '**/src/*.ts': 'coverage-istanbul'
         },
 
