@@ -18,6 +18,7 @@ module.exports = function (config) {
             require('karma-chrome-launcher'),
             require('karma-webpack'),
             require('karma-sourcemap-loader'),
+            require('karma-junit-reporter'),
             require('karma-spec-reporter'),
             require('karma-coverage-istanbul-reporter'),
             require("istanbul-instrumenter-loader")
@@ -36,6 +37,7 @@ module.exports = function (config) {
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
             'spec.bundle.js': ['webpack', 'sourcemap']
+            // '**/src/*.ts': 'coverage-istanbul'
         },
 
         // webpack
@@ -82,10 +84,14 @@ module.exports = function (config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['spec', 'coverage-istanbul'],
+        reporters: ['spec', 'coverage-istanbul', 'dots'],
+
+        junitReporter: {
+            outputFile: 'test-results.xml'
+        },
 
         coverageIstanbulReporter: {
-            reports: ['html', 'lcovonly'],
+            reports: ['html', 'lcovonly', 'lcov'],
             dir: path.join(__dirname, 'coverage'),
             fixWebpackSourcePaths: true
         },
