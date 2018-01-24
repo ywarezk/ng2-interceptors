@@ -37,7 +37,7 @@ export function initialize(options: IOptionsInterceptorModule): DecorateRequestI
     for (const keyValue of tempParamsArray) {
       const key = keyValue.split('=')[0];
       const val = keyValue.split('=')[1];
-      params.set(key, val);
+      params = params.set(key, val);
     }
   } else if (options && options.params) {
     for (const key of Object.keys(options.params)) {

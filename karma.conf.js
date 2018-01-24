@@ -27,7 +27,7 @@ module.exports = function (config) {
 
         // list of files / patterns to load in the browser
         files: [
-            { pattern: 'spec.bundle.ts', watched: false }
+            { pattern: 'spec.bundle.js', watched: false }
         ],
 
         // list of files to exclude
@@ -37,7 +37,7 @@ module.exports = function (config) {
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'spec.bundle.ts': ['webpack', 'sourcemap']
+            'spec.bundle.js': ['webpack', 'sourcemap']
             // '**/src/*.ts': 'coverage-istanbul'
         },
 
@@ -48,6 +48,16 @@ module.exports = function (config) {
             },
             module: {
                 rules: [
+                    {
+                      test: /\.js$/,
+                      exclude: /node_modules/,
+                      use: {
+                        loader: 'babel-loader',
+                        options: {
+                          presets: ['babel-preset-env']
+                        }
+                      }
+                    },
                     {
                         test: /\.ts/,
                         use: [
