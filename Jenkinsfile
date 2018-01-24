@@ -38,6 +38,13 @@ node('EC2') {
                 sourceEncoding: 'ASCII',
                 zoomCoverageChart: false
             ])
+            withCredentials(
+              [
+                string(credentialsId: 'CODCOV', variable: 'CODCOV')
+              ]
+            ){
+                sh "curl -s https://codecov.io/bash | bash -s - -t $CODCOV || echo 'Codecov did not collect coverage reports'"
+            }
         stage 'Publish npm'
             try {
                 withCredentials(
