@@ -93,7 +93,7 @@ module.exports = function (config) {
         },
 
         coverageIstanbulReporter: {
-            reports: ['html'],
+            reports: ['html', 'cobertura'],
             dir: path.join(__dirname, 'reports/coverage'),
             fixWebpackSourcePaths: true
         },
