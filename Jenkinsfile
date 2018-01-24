@@ -25,8 +25,13 @@ node('EC2') {
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports/coverage/', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
             step([$class: 'JUnitResultArchiver', testResults: "reports/junit/**/*.xml"])
         stage 'Publish npm'
-            sh "echo 'this should not be reached'"
-
+            withCredentials(
+              [
+                string(credentialsId: 'PUBLIC_NPM_TOKEN', variable: 'NPM_TOKEN')
+              ]
+            ){
+                sh "npm run publish:lib"
+            }
     }
     catch(err) {
         def email = new Email(this)
