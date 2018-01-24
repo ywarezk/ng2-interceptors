@@ -1,6 +1,7 @@
 # nz-ng2-interceptors
 
-[![Build Status](https://jenkins.nerdeez.com/buildStatus/icon?job=ng-interceptors/dev-0.0.9&build=16)]
+![Build Status](https://jenkins.nerdeez.com/buildStatus/icon?job=ng-interceptors/dev-0.0.9)
+
 
 ## About
 
