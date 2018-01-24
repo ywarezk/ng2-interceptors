@@ -43,7 +43,7 @@ node('EC2') {
                 string(credentialsId: 'CODCOV', variable: 'CODCOV')
               ]
             ){
-                sh "cd reports/coverage && curl -s https://codecov.io/bash | bash -s - -t $CODCOV || echo 'Codecov did not collect coverage reports'"
+                sh "curl -s https://codecov.io/bash | bash -s - -t $CODCOV || echo 'Codecov did not collect coverage reports'"
             }
         stage 'Publish npm'
             try {
