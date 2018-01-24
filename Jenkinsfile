@@ -21,7 +21,7 @@ node('EC2') {
             def imageName = docker.dockerBuild("")
         stage 'Run Tests'
             def workspace = pwd()
-            sh "docker run -v $workspace/coverage:/usr/app/coverage $imageName node_modules/.bin/karma start karma.conf.js --single-run true --browsers PhantomJS"
+            sh "docker run -v $workspace/reports:/usr/app/reports $imageName node_modules/.bin/karma start karma.conf.js --single-run true --browsers PhantomJS"
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports/coverage/', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
             step([$class: 'JUnitResultArchiver', testResults: "reports/junit/**/*.xml"])
 
