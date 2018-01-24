@@ -30,7 +30,7 @@ node('EC2') {
                 string(credentialsId: 'PUBLIC_NPM_TOKEN', variable: 'NPM_TOKEN')
               ]
             ){
-                sh "npm run publish:lib"
+                sh "docker run $imageName node_modules/.bin/ci-publish ./dist"
             }
     }
     catch(err) {
