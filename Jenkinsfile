@@ -25,12 +25,17 @@ node('EC2') {
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports/coverage/', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
             step([$class: 'JUnitResultArchiver', testResults: "reports/junit/**/*.xml"])
         stage 'Publish npm'
-            withCredentials(
-              [
-                string(credentialsId: 'PUBLIC_NPM_TOKEN', variable: 'NPM_TOKEN')
-              ]
-            ){
-                sh "docker run -e NPM_TOKEN=$NPM_TOKEN $imageName node_modules/.bin/ci-publish ./dist"
+            try {
+                withCredentials(
+                  [
+                    string(credentialsId: 'PUBLIC_NPM_TOKEN', variable: 'NPM_TOKEN')
+                  ]
+                ){
+                    sh "docker run -e NPM_TOKEN=$NPM_TOKEN $imageName node_modules/.bin/ci-publish ./dist"
+                }
+            }
+            catch(err) {
+                sh "echo 'If you want to publish the version you must increase the version in package.json'"
             }
     }
     catch(err) {
