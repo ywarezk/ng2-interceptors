@@ -30,7 +30,7 @@ node('EC2') {
                 string(credentialsId: 'PUBLIC_NPM_TOKEN', variable: 'NPM_TOKEN')
               ]
             ){
-                sh "docker run $imageName export NPM_TOKEN=$NPM_TOKEN && node_modules/.bin/ci-publish ./dist"
+                sh "docker run -e NPM_TOKEN=$NPM_TOKEN $imageName node_modules/.bin/ci-publish ./dist"
             }
     }
     catch(err) {
