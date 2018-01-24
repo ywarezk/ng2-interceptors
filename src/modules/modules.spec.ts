@@ -163,4 +163,31 @@ describe('Modules', () => {
         );
     });
 
+    describe('params as string', () => {
+
+        beforeEach(() => {
+            TestBed.configureTestingModule({
+                imports: [
+                    HttpClientTestingModule,
+                    DecorateRequestModule.withOptions({
+                        params: '?format=json'
+                    })
+                ]
+            })
+        });
+
+        it(
+            'should add the format=json to the params of the request',
+            inject([HttpClient, HttpTestingController], (http: HttpClient, httpMock: HttpTestingController) => {
+                http
+                    .get('data')
+                    .subscribe();
+                const req = httpMock.expectOne((request: HttpRequest<any>) => {
+                    return request.params.get('format') === 'json';
+                });
+                req.flush({});
+                httpMock.verify();
+        }))
+    });
+
 });
