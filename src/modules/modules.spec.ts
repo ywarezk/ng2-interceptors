@@ -161,10 +161,6 @@ describe('Modules', () => {
                 httpMock.verify();
             })
         );
-
-        it('test fail', () => {
-            expect(false).toBe(true);
-        });
     });
 
 });
