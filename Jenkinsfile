@@ -24,6 +24,20 @@ node('EC2') {
             sh "docker run -v $workspace/reports:/usr/app/reports $imageName node_modules/.bin/karma start karma.conf.js --single-run true --browsers PhantomJS"
             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'reports/coverage/', reportFiles: 'index.html', reportName: 'Coverage Report', reportTitles: ''])
             step([$class: 'JUnitResultArchiver', testResults: "reports/junit/**/*.xml"])
+            cobertura([
+                autoUpdateHealth: false,
+                autoUpdateStability: false,
+                coberturaReportFile: 'reports/coverage/cobertura-coverage.xml',
+                conditionalCoverageTargets: '70, 0, 0',
+                failUnhealthy: false,
+                failUnstable: false,
+                lineCoverageTargets: '80, 0, 0',
+                maxNumberOfBuilds: 0,
+                methodCoverageTargets: '80, 0, 0',
+                onlyStable: false,
+                sourceEncoding: 'ASCII',
+                zoomCoverageChart: false
+            ])
         stage 'Publish npm'
             try {
                 withCredentials(
