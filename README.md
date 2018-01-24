@@ -1,7 +1,7 @@
 # nz-ng2-interceptors
 
 ![Build Status](https://jenkins.nerdeez.com/buildStatus/icon?job=ng-interceptors/dev-0.0.9)
-
+[![codecov](https://codecov.io/gh/ywarezk/ng2-interceptors/branch/dev-0.0.9/graph/badge.svg)](https://codecov.io/gh/ywarezk/ng2-interceptors)
 
 ## About
 
